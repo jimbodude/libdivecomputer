@@ -601,6 +601,9 @@ shearwater_predator_parser_cache (shearwater_predator_parser_t *parser)
 			// calibration value is scaled with a factor 2.2, then the
 			// sensors lines up and matches the average.
 			parser->calibration[i] *= 2.2;
+			char sensorname[25];
+			sprintf(sensorname, "O2 Sensor Calibration %d", i);
+			add_string_fmt(parser, sensorname, "%d %s", parser->calibration[i], "mV");
 		}
 		if (data[base] & (1 << i)) {
 			if (calibration == 2100) {
@@ -616,7 +619,7 @@ shearwater_predator_parser_cache (shearwater_predator_parser_t *parser)
 		// application, they are manually disabled (e.g. marked as
 		// uncalibrated).
 		WARNING (abstract->context, "Disabled all O2 sensors due to a default calibration value.");
-		parser->calibrated = 0;
+		parser->calibrated = data[base];
 		if (mode != DC_DIVEMODE_OC)
 			add_string(parser, "PPO2 source", "voted/averaged");
 	} else {
